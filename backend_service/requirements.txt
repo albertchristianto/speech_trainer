@@ -1,4 +1,7 @@
 torch
 torchvision 
 torchaudio
+opencc
+pydub
+accelerate
 TTS==0.22.0
