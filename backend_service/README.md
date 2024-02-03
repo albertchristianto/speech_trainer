@@ -15,6 +15,7 @@ install.sh # for linux
 Download the weights for stt and tts from these links:
 1. https://huggingface.co/openai/whisper-small/tree/main 
 2. https://huggingface.co/coqui/XTTS-v2/tree/main
+
 Put the data into "backend_service/weights/whisper-small" and "backend_service/weights/xttsv2"
 
 And, execute the backend service server with 
@@ -22,6 +23,9 @@ And, execute the backend service server with
 # then execute the backend service server
 python main.py
 ```
+
+## API Documentation
+The backend service is built using FastAPI framework where the documentations of the HTTP APIs are generated automatically and can be accessed in http://locahost:8000
 
 ## Reference Repository
 1. https://github.com/zszyellow/WER-in-python/tree/master 
