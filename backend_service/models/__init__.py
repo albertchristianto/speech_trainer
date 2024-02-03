@@ -10,15 +10,15 @@ def get_tts_models(model_name, weight_dir_path, use_gpu):
     return XttsV2(weight_dir_path, use_gpu)
   return None
 
-def get_stt_models(model_name, weight_dir_path):
+def get_stt_models(model_name, weight_dir_path, use_gpu):
   if model_name == "whisper":
-    return Whisper(weight_dir_path)
+    return Whisper(weight_dir_path, use_gpu)
   return None
 
 def load_speech_model(config_path):
   f = open(config_path)
   system_param = json.load(f)
-  stt = get_stt_models(system_param['stt_model'], system_param['stt_weights_path'])
+  stt = get_stt_models(system_param['stt_model'], system_param['stt_weights_path'], (system_param['stt_use_gpu'] > 0))
   tts = get_tts_models(system_param['tts_model'], system_param['tts_weights_path'], (system_param['tts_use_gpu'] > 0))
   return stt, tts
 

@@ -1,6 +1,7 @@
 import opencc
-from text_normalizer.cn_tn import TextNorm
-from text_normalizer.utils import remove_space_before_after_text
+
+from common.text_normalizer.cn_tn import TextNorm
+from common.text_normalizer.utils import remove_space_before_after_text
 
 CONVERTER = opencc.OpenCC('s2tw.json')
 

@@ -1,7 +1,12 @@
+--index-url https://download.pytorch.org/whl/cu118
 torch
 torchvision 
 torchaudio
 opencc
 pydub
 accelerate
+fastapi
+uvicorn[standard]
+loguru
+python-multipart
 TTS==0.22.0

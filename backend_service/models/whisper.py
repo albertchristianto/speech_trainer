@@ -7,8 +7,10 @@ from pydub import AudioSegment
 from models.stt import Speech2TextInterface
 
 class Whisper(Speech2TextInterface):
-  def __init__(self, model_path="weights/whisper-small"):
-    self.model = WhisperForConditionalGeneration.from_pretrained(model_path, device_map="auto")
+  def __init__(self, model_path="weights/whisper-small", use_gpu=True):
+    self.use_gpu = use_gpu
+    self.device = "cuda" if use_gpu else "cpu"
+    self.model = WhisperForConditionalGeneration.from_pretrained(model_path, device_map=self.device)
     self.processor = WhisperProcessor.from_pretrained(model_path, language=None, task="transcribe")
     self.model.config.forced_decoder_ids = None
     self.model.config.suppress_tokens = [] #['<|nothing|>']
@@ -25,7 +27,8 @@ class Whisper(Speech2TextInterface):
       audio_segment = audio_segment.set_channels(1)
     arr = np.array(audio_segment.get_array_of_samples())
     arr = arr.astype(np.float32) / 32768.0
-    input_features = self.processor(arr, sampling_rate=16000, return_tensors="pt").input_features.cuda()
+    input_features = self.processor(arr, sampling_rate=16000, return_tensors="pt").input_features
+    if self.use_gpu: input_features = input_features.cuda()
     forced_decoder_ids = self.processor.get_decoder_prompt_ids(language=lang, task="transcribe")
     self.model.config.forced_decoder_ids = forced_decoder_ids
     outputs = self.model.generate(input_features)

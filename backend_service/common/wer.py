@@ -175,14 +175,13 @@ def alignedPrint(list, r, h, result):
             print(" " * (len(r[index])), end=" ")
     print("\nWER: " + result)
 
-def wer(r, h):
+def wer(r, h, print_to_console=False):
     """
     This is a function that calculate the word error rate in ASR.
     You can use it like this: wer("what is it".split(), "what is".split()) 
     """
     # build the matrix
     d = editDistance(r, h)
-    print(d)
 
     # find out the manipulation steps
     list = getStepList(r, h, d)
@@ -190,7 +189,9 @@ def wer(r, h):
     # print the result in aligned way
     result = float(d[len(r)][len(h)]) / len(r) * 100
     result = str("%.2f" % result) + "%"
-    alignedPrint(list, r, h, result)
+    if print_to_console:
+        alignedPrint(list, r, h, result)
+    return result
 
 if __name__ == '__main__':
-    wer("what is it".split(), "what is".split()) 
+    print(wer("what is it".split(), "what is".split()))

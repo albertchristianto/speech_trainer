@@ -1,5 +1,6 @@
 from transformers.models.whisper.english_normalizer import BasicTextNormalizer
-from text_normalizer.utils import remove_space_before_after_text
+
+from common.text_normalizer.utils import remove_space_before_after_text
 
 EN_BASIC_NORMALIZER = BasicTextNormalizer()
 
