@@ -22,7 +22,7 @@ TEMP_CACHE_PATH = "temp_cache"
 def text_to_speech_generate(text: str, lang: str = "zh"):
   if not os.path.exists(TEMP_CACHE_PATH):
     os.makedirs(TEMP_CACHE_PATH)
-  ref_wav_path = "rsc/female.mp3" if random.random() > 0.5 else "rsc/male.mp3"
+  ref_wav_path = f"rsc/{lang}_female.wav" if random.random() > 0.5 else f"rsc/{lang}_male.wav"
   out_filename = f"{time.time()}_ning.wav"
   output_path = os.path.join(TEMP_CACHE_PATH, out_filename)
   try:

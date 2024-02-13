@@ -25,7 +25,7 @@ python main.py
 ```
 
 ## API Documentation
-The backend service is built using FastAPI framework where the documentations of the HTTP APIs are generated automatically and can be accessed in http://locahost:8000
+The backend service is built using FastAPI framework where the documentations of the HTTP APIs are generated automatically and can be accessed in http://localhost:8000/docs
 
 ## Reference Repository
 1. https://github.com/zszyellow/WER-in-python/tree/master 

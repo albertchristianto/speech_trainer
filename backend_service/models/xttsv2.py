@@ -25,7 +25,7 @@ class XttsV2(Text2SpeechInterface):
       return input_text
     return input_text + "。"
 
-  def forward(self, input_text: str, lang: str, ref_wav_file_path: str="ref_voices/test/28112023/annie_898_2.wav") -> np.ndarray:
+  def forward(self, input_text: str, lang: str, ref_wav_file_path: str="rsc/en_female.wav") -> np.ndarray:
     input_text = self.adding_punctuation(input_text)
     outputs = self.model.synthesize(input_text, self.config, speaker_wav=ref_wav_file_path, gpt_cond_len=0.2,
                                     language=lang, num_beams=2, length_penalty=0.8, speed=0.9)
