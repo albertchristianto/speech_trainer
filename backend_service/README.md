@@ -24,6 +24,11 @@ And, execute the backend service server with
 python main.py
 ```
 
+The unit tests of the Http API are provided in test_main.py and execute this command for testing the API.
+```
+pytest
+```
+
 ## API Documentation
 The backend service is built using FastAPI framework where the documentations of the HTTP APIs are generated automatically and can be accessed in http://localhost:8000/docs
 
