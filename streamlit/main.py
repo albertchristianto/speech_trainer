@@ -13,6 +13,9 @@ st.markdown('''<style>.css-nlntq9 a {color: #ff4c4b;}</style>''',
             unsafe_allow_html=True)  # lightmode
 
 SPEECH_URL = 'http://localhost:8000'
+STT_SPEECH_URL = f"{SPEECH_URL}/recognize_speech"
+TTS_SPEECH_URL = f"{SPEECH_URL}/generate_sample_audio"
+SCORING_SPEECH_URL = f"{SPEECH_URL}/get_score"
 
 def audiorec_demo_app():
     speech_service_status = False
@@ -35,39 +38,48 @@ def audiorec_demo_app():
     col_info, col_space = st.columns([0.57, 0.43])
     with col_info:
         user_input = st.text_input('Type your text below')
-        st.write('\n')  # add vertical spacer
-        wav_audio_data = audio_recorder(energy_threshold=[0.15,0.01], pause_threshold=1.5, sample_rate=44100)# tadaaaa! yes, that's it! :D
-        st.write('\n')  # add vertical spacer
-
-        if wav_audio_data is not None:
-            # display audio data as received on the Python side
-            col_playback, col_space = st.columns([0.58,0.42])
-            with col_playback:
-                if lang == "None":
-                    the_url = f"{STT_SERVICE_URL}"
-                else:
-                    the_url = f"{STT_SERVICE_URL}/?lang={lang}"
-                st.audio(wav_audio_data, format='audio/wav')
-                file = { 'file': wav_audio_data }
-                try:
-                    resp = requests.post(url=the_url, files=file)
-                    resp = resp.json()
-                    print(resp['text'])
-
-                    st.write(resp['text'])  # add vertical spacer
-                    st.write(f"the language is {resp['language']}")  # add vertical spacer
-                except:
-                    st.warning("failed to send the audio files to the server")
     with col_space:
         if st.button('Submit'):
             try:
-                file = {'text': user_input, "gender": gender, "language": lang}
-                resp = requests.post(url=TTS_SERVICE_URL, json=file,)
+                the_url = f"{TTS_SPEECH_URL}/?text={user_input}&lang={lang}"
+                resp = requests.get(url=the_url)
                 st.audio(resp.content, format='audio/wav')
                 # out_path = resp.headers['content
             except Exception as e:
                 print(e)
                 st.warning("Failed to use the TTS API")
+    col_info2, col_space2 = st.columns([0.57, 0.43])
+    with col_info2:
+        wav_audio_data = audio_recorder(energy_threshold=[0.15,0.01], pause_threshold=1.5, sample_rate=44100)# tadaaaa! yes, that's it! :D
+        st.write('\n')  # add vertical spacer
+        do_scoring = False
+        if wav_audio_data is not None:
+            # display audio data as received on the Python side
+            col_playback, col_space = st.columns([0.58,0.42])
+            with col_playback:
+                the_url = f"{STT_SPEECH_URL}/?lang={lang}"
+                st.audio(wav_audio_data, format='audio/wav')
+                file = { 'file': wav_audio_data }
+                try:
+                    resp = requests.post(url=the_url, files=file)
+                    resp = resp.json()
+                    result = resp['text'][0]
+                    print(resp['text'])
+                    st.write(resp['text'][0])  # add vertical spacer
+                    do_scoring = True
+                except Exception as e:
+                    print(e)
+                    st.warning("failed to do speech recognition")
+                if do_scoring:
+                    try:
+                        the_url = f"{SCORING_SPEECH_URL}/?ground_truth={user_input}&answer={result}&lang={lang}"
+                        resp = requests.get(url=the_url)
+                        resp = resp.json()
+                        print(resp['score'])
+                        st.write(f"Your speech error rate is {resp['score']}")  # add vertical spacer
+                    except Exception as e:
+                        print(e)
+                        st.warning("failed to do scoring")
 
 if __name__ == '__main__':
     # call main function
