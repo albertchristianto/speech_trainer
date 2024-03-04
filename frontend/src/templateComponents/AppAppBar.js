@@ -106,6 +106,14 @@ function AppAppBar({ mode, toggleColorMode }) {
               </Typography>
               <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
                 <MenuItem
+                  onClick={() => scrollToSection('TextToSpeech')}
+                  sx={{ py: '6px', px: '12px' }}
+                >
+                  <Typography variant="body2" color="text.primary">
+                    Text To Speech
+                  </Typography>
+                </MenuItem>
+                <MenuItem
                   onClick={() => scrollToSection('features')}
                   sx={{ py: '6px', px: '12px' }}
                 >
@@ -162,6 +170,7 @@ function AppAppBar({ mode, toggleColorMode }) {
                 component="a"
                 href="/material-ui/getting-started/templates/sign-in/"
                 target="_blank"
+                disabled
               >
                 Sign in
               </Button>
@@ -172,6 +181,7 @@ function AppAppBar({ mode, toggleColorMode }) {
                 component="a"
                 href="/material-ui/getting-started/templates/sign-up/"
                 target="_blank"
+                disabled
               >
                 Sign up
               </Button>

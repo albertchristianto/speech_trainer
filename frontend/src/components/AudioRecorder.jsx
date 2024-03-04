@@ -1,6 +1,7 @@
 'use client'
 import { useState, useRef } from "react";
-import { Button, Typography, Stack } from "@mui/material";
+import { Button, Typography, Stack, TextField, LinearProgress } from "@mui/material";
+import { Box } from "@mui/system";
 
 const mimeType = "audio/wav";
 
@@ -68,50 +69,51 @@ const AudioRecorder = () => {
     };
 
     return (
-        <div>
+        <Stack
+            className="audio-controls"
+            direction={{ xs: 'column', sm: 'column' }}
+            alignSelf="center"
+            spacing={1}
+            useFlexGap
+            sx={{ pt: 2, width: { xs: '100%', sm: '50%' } }}>
             <Typography variant="h2" gutterBottom sx={{ display: 'none' }}>Audio Recorder</Typography>
-            <Stack
-                className="audio-controls"
-                direction={{ xs: 'column', sm: 'column' }}
-                alignSelf="center"
-                spacing={1}
-                useFlexGap
-                sx={{ pt: 2, width: { xs: '100%', sm: 'auto' } }}>
-                {!permission ? (
-                    <Button variant="contained" color="primary" onClick={getMicrophonePermission} type="button">
-                        Click to Turn On Microphone
+            {!permission ? (
+                <Button variant="contained" color="primary" onClick={getMicrophonePermission} type="button">
+                    Click to Turn On Microphone
+                </Button>
+            ) : null}
+            {permission && recordingStatus === "inactive" ? (
+                <Button variant="contained" color="primary" onClick={startRecording} type="button">
+                    Start Recording
+                </Button>
+            ) : null}
+            {recordingStatus === "recording" ? (
+                <Button variant="contained" color="primary" onClick={stopRecording} type="button">
+                    Stop Recording
+                </Button>
+            ) : null}
+
+            {recordingStatus === 'recording' && < LinearProgress sx={{ mt: 1 }} />}
+            {audio && recordingStatus === 'inactive' ? (
+                <Box sx={{ width: '100%' }} direction={{ xs: 'column', sm: 'column' }}>
+                    <center><audio src={audio} controls></audio></center>
+                    <Button variant="contained" color="primary" download href={audio} fullWidth>
+                        Download Recording
                     </Button>
-                ) : null}
-                {permission && recordingStatus === "inactive" ? (
-                    <Button variant="contained" color="primary" onClick={startRecording} type="button">
-                        Start Recording
-                    </Button>
-                ) : null}
-                {recordingStatus === "recording" ? (
-                    <Button variant="contained" color="primary" onClick={stopRecording} type="button">
-                        Stop Recording
-                    </Button>
-                ) : null}
-            </Stack>
-            <Stack
-                className="audio-player"
-                direction={{ xs: 'column', sm: 'column' }}
-                alignSelf="center"
-                spacing={1}
-                useFlexGap
-                sx={{ pt: 2, width: { xs: '100%', sm: 'auto' } }}>
-                {audio ? (
-                    <>
-                        <audio src={audio} controls></audio>
-                        <Button variant="contained" color="primary" download href={audio}>
-                            Download Recording
-                        </Button>
-                    </>
-                ) : <>
-                    <audio src={null} controls></audio>
-                </>}
-            </Stack>
-        </div>
+                    <TextField
+                        id="generated-text"
+                        label="Generated Text"
+                        multiline
+                        rows={4}
+                        sx={{ m: 1 }}
+                        placeholder="Generated Text will be shown here."
+                        fullWidth
+                        disabled
+                    />
+                </Box>
+            ) : null
+            }
+        </Stack >
     );
 };
 

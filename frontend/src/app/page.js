@@ -9,16 +9,17 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import AutoAwesomeRoundedIcon from '@mui/icons-material/AutoAwesomeRounded';
-import AppAppBar from './templateComponents/AppAppBar';
-import Hero from './templateComponents/Hero';
-import LogoCollection from './templateComponents/LogoCollection';
-import Highlights from './templateComponents/Highlights';
-import Pricing from './templateComponents/Pricing';
-import Features from './templateComponents/Features';
-import Testimonials from './templateComponents/Testimonials';
-import FAQ from './templateComponents/FAQ';
-import Footer from './templateComponents/Footer';
+import AppAppBar from '../templateComponents/AppAppBar';
+import Hero from '../templateComponents/Hero';
+import LogoCollection from '../templateComponents/LogoCollection';
+import Highlights from '../templateComponents/Highlights';
+import Pricing from '../templateComponents/Pricing';
+import Features from '../templateComponents/Features';
+import Testimonials from '../templateComponents/Testimonials';
+import FAQ from '../templateComponents/FAQ';
+import Footer from '../templateComponents/Footer';
 import getLPTheme from './getLPTheme';
+import TextToSpeech from '../templateComponents/TextToSpeech';
 
 const defaultTheme = createTheme({});
 
@@ -82,8 +83,11 @@ export default function LandingPage() {
       <CssBaseline />
       <AppAppBar mode={mode} toggleColorMode={toggleColorMode} />
       <Hero />
+      <Divider />
+      <TextToSpeech />
       <Box sx={{ bgcolor: 'background.default' }}>
         {/*<LogoCollection />*/}
+        <Divider />
         <Features />
         <Divider />
         <Testimonials />

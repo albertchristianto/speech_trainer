@@ -7,7 +7,7 @@ import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import AudioRecorder from "../../component/AudioRecorder"
+import AudioRecorder from "../components/AudioRecorder"
 
 export default function Hero() {
   return (
@@ -43,7 +43,7 @@ export default function Hero() {
               textAlign: 'center',
             }}
           >
-            Our latest&nbsp;
+            Speech to&nbsp;
             <Typography
               component="span"
               variant="h1"
@@ -52,7 +52,7 @@ export default function Hero() {
                   theme.palette.mode === 'light' ? 'primary.main' : 'primary.light',
               }}
             >
-              products
+              text
             </Typography>
           </Typography>
           <Typography variant="body1" textAlign="center" color="text.secondary">
@@ -81,15 +81,7 @@ export default function Hero() {
             </Button>
           </Stack>
           {/* -NOT DISPLAYED- */}
-          <Stack
-            direction={{ xs: 'column', sm: 'row' }}
-            alignSelf="center"
-            spacing={1}
-            useFlexGap
-            sx={{ pt: 2, width: { xs: '100%', sm: 'auto' } }}
-          >
-            <AudioRecorder />
-          </Stack>
+          <AudioRecorder />
           <Typography variant="caption" textAlign="center" sx={{ opacity: 0.8 }}>
             By clicking &quot;Start Recording&quot; you agree to our&nbsp;
             <Link href="#" color="primary">
