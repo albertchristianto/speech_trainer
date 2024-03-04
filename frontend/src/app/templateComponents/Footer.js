@@ -11,6 +11,7 @@ import Typography from '@mui/material/Typography';
 import FacebookIcon from '@mui/icons-material/GitHub';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import TwitterIcon from '@mui/icons-material/X';
+import MicIcon from '@mui/icons-material/Mic';
 
 const logoStyle = {
   width: '140px',
@@ -21,7 +22,7 @@ function Copyright() {
   return (
     <Typography variant="body2" color="text.secondary" mt={1}>
       {'Copyright © '}
-      <Link href="https://mui.com/">Sitemark&nbsp;</Link>
+      <Link href="#">Speech Training&nbsp;</Link>
       {new Date().getFullYear()}
     </Typography>
   );
@@ -57,13 +58,24 @@ export default function Footer() {
         >
           <Box sx={{ width: { xs: '100%', sm: '60%' } }}>
             <Box sx={{ ml: '-15px' }}>
-              <img
+              {/*<img
                 src={
                   'https://assets-global.website-files.com/61ed56ae9da9fd7e0ef0a967/61f12e6faf73568658154dae_SitemarkDefault.svg'
                 }
                 style={logoStyle}
                 alt="logo of sitemark"
-              />
+              />*/}
+              <Typography variant="h6" sx={{
+                color: (theme) =>
+                  theme.palette.mode === 'light' ? 'primary.main' : 'primary.light',
+                marginLeft: '1rem',
+                display: 'flex', alignItems: 'middle'
+              }}
+
+              >
+                <MicIcon />
+                Speech Training
+              </Typography>
             </Box>
             <Typography variant="body2" fontWeight={600} gutterBottom>
               Newsletter
@@ -80,10 +92,7 @@ export default function Footer() {
                 fullWidth
                 aria-label="Enter your email address"
                 placeholder="Your email address"
-                inputProps={{
-                  autocomplete: 'off',
-                  ariaLabel: 'Enter your email address',
-                }}
+                autoComplete='off'
               />
               <Button variant="contained" color="primary" sx={{ flexShrink: 0 }}>
                 Subscribe
@@ -191,23 +200,23 @@ export default function Footer() {
         >
           <IconButton
             color="inherit"
-            href="https://github.com/mui"
+            href="https://github.com/albertchristianto/speech_trainer"
             aria-label="GitHub"
             sx={{ alignSelf: 'center' }}
           >
             <FacebookIcon />
           </IconButton>
-          <IconButton
+          {/*<IconButton
             color="inherit"
-            href="https://twitter.com/MaterialUI"
+            href="https://twitter.com/"
             aria-label="X"
             sx={{ alignSelf: 'center' }}
           >
             <TwitterIcon />
-          </IconButton>
+          </IconButton>*/}
           <IconButton
             color="inherit"
-            href="https://www.linkedin.com/company/mui/"
+            href="https://www.linkedin.com/"
             aria-label="LinkedIn"
             sx={{ alignSelf: 'center' }}
           >

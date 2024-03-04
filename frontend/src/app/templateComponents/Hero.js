@@ -56,9 +56,8 @@ export default function Hero() {
             </Typography>
           </Typography>
           <Typography variant="body1" textAlign="center" color="text.secondary">
-            Explore our cutting-edge dashboard, delivering high-quality solutions
-            tailored to your needs. <br />
-            Elevate your experience with top-tier features and services.
+            Unleashing the Potential of Speech with Our Web-Based Speech Trainer. <br />
+            Transforming Text into Eloquence and Back, Explore the Power of Speech Training with Our Innovative Web Platform.
           </Typography>
           {/* -NOT DISPLAYED- */}
           <Stack
@@ -75,10 +74,7 @@ export default function Hero() {
               variant="outlined"
               aria-label="Enter your email address"
               placeholder="Your email address"
-              inputProps={{
-                autocomplete: 'off',
-                ariaLabel: 'Enter your email address',
-              }}
+              autoComplete='off'
             />
             <Button variant="contained" color="primary">
               Start now
@@ -102,6 +98,7 @@ export default function Hero() {
             .
           </Typography>
         </Stack>
+        {/*
         <Box
           id="image"
           sx={(theme) => ({
@@ -125,7 +122,7 @@ export default function Hero() {
                 ? `0 0 12px 8px ${alpha('#9CCCFC', 0.2)}`
                 : `0 0 24px 12px ${alpha('#033363', 0.2)}`,
           })}
-        />
+        />*/}
       </Container>
     </Box>
   );
