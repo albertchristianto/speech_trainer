@@ -1,3 +1,3 @@
 #!/bin/bash
 cd backend_service
-python main.py
+uvicorn main:app --port 8000

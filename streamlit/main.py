@@ -2,15 +2,11 @@ import requests
 import streamlit as st
 from audio_recorder_streamlit import audio_recorder
 
-st.set_page_config(page_title="")
-st.markdown('''<style>.css-1egvi7u {margin-top: -3rem;}</style>''',
-            unsafe_allow_html=True)
-st.markdown('''<style>.stAudio {height: 45px;}</style>''',
-            unsafe_allow_html=True)
-st.markdown('''<style>.css-v37k9u a {color: #ff4c4b;}</style>''',
-            unsafe_allow_html=True)  # darkmode
-st.markdown('''<style>.css-nlntq9 a {color: #ff4c4b;}</style>''',
-            unsafe_allow_html=True)  # lightmode
+st.set_page_config(page_title="Speech Trainer Tools")
+st.markdown('''<style>.css-1egvi7u {margin-top: -3rem;}</style>''', unsafe_allow_html=True)
+st.markdown('''<style>.stAudio {height: 45px;}</style>''', unsafe_allow_html=True)
+st.markdown('''<style>.css-v37k9u a {color: #ff4c4b;}</style>''', unsafe_allow_html=True)  # darkmode
+st.markdown('''<style>.css-nlntq9 a {color: #ff4c4b;}</style>''', unsafe_allow_html=True)  # lightmode
 
 SPEECH_URL = 'http://localhost:8000'
 STT_SPEECH_URL = f"{SPEECH_URL}/recognize_speech"
@@ -30,7 +26,7 @@ def audiorec_demo_app():
         st.error("The speech API is down!!")
         st.stop()
 
-    st.title('Speech Trainer')
+    st.title('Speech Trainer Tools')
     st.markdown('Train your speech skill here!')
     st.write('\n\n')
 
@@ -39,7 +35,7 @@ def audiorec_demo_app():
     with col_info:
         user_input = st.text_input('Type your text below')
     with col_space:
-        if st.button('Submit'):
+        if st.button('Listen'):
             try:
                 the_url = f"{TTS_SPEECH_URL}/?text={user_input}&lang={lang}"
                 resp = requests.get(url=the_url)
@@ -54,33 +50,29 @@ def audiorec_demo_app():
         st.write('\n')  # add vertical spacer
         do_scoring = False
         if wav_audio_data is not None:
-            # display audio data as received on the Python side
-            col_playback, col_space = st.columns([0.58,0.42])
-            with col_playback:
-                the_url = f"{STT_SPEECH_URL}/?lang={lang}"
-                st.audio(wav_audio_data, format='audio/wav')
-                file = { 'file': wav_audio_data }
+            the_url = f"{STT_SPEECH_URL}/?lang={lang}"
+            st.audio(wav_audio_data, format='audio/wav')
+            file = { 'file': wav_audio_data }
+            try:
+                resp = requests.post(url=the_url, files=file)
+                resp = resp.json()
+                result = resp['text'][0]
+                print(resp['text'])
+                st.write(resp['text'][0])  # add vertical spacer
+                do_scoring = True
+            except Exception as e:
+                print(e)
+                st.warning("failed to do speech recognition")
+            if do_scoring:
                 try:
-                    resp = requests.post(url=the_url, files=file)
+                    the_url = f"{SCORING_SPEECH_URL}/?ground_truth={user_input}&answer={result}&lang={lang}"
+                    resp = requests.get(url=the_url)
                     resp = resp.json()
-                    result = resp['text'][0]
-                    print(resp['text'])
-                    st.write(resp['text'][0])  # add vertical spacer
-                    do_scoring = True
+                    print(resp['score'])
+                    st.write(f"Your speech error rate is {resp['score']}")  # add vertical spacer
                 except Exception as e:
                     print(e)
-                    st.warning("failed to do speech recognition")
-                if do_scoring:
-                    try:
-                        the_url = f"{SCORING_SPEECH_URL}/?ground_truth={user_input}&answer={result}&lang={lang}"
-                        resp = requests.get(url=the_url)
-                        resp = resp.json()
-                        print(resp['score'])
-                        st.write(f"Your speech error rate is {resp['score']}")  # add vertical spacer
-                    except Exception as e:
-                        print(e)
-                        st.warning("failed to do scoring")
+                    st.warning("failed to do speech scoring")
 
 if __name__ == '__main__':
-    # call main function
-    audiorec_demo_app()
+    audiorec_demo_app()    # call main function

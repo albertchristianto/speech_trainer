@@ -4,7 +4,7 @@ from pydub import AudioSegment
 from loguru import logger
 
 def save_audio_file(file):
-  file_name = f"{time.time()}_{file.filename}"
+  file_name = f"{int(time.time())}_{file.filename}"
   file_name = os.path.join("temp_cache", file_name)
   pre, ext = os.path.splitext(file_name)
   if ext == "":
