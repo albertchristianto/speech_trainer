@@ -210,7 +210,7 @@ export default function Footer() {
             sx={{ alignSelf: 'center' }}
           >
             <TwitterIcon />
-          </IconButton>*/}
+          </IconButton>
           <IconButton
             color="inherit"
             href="https://www.linkedin.com/"
@@ -218,7 +218,7 @@ export default function Footer() {
             sx={{ alignSelf: 'center' }}
           >
             <LinkedInIcon />
-          </IconButton>
+          </IconButton>*/}
         </Stack>
       </Box>
     </Container >

@@ -69,7 +69,7 @@ const AudioRecorder = () => {
 
             setAudioChunks([]);
 
-            createSTT({ file: audioBlob, text: 'test' });
+            createSTT({ file: audioBlob, text: 'test' }, { onError: (error) => { console.error('error calling API'); } });
         };
     };
 

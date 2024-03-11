@@ -21,6 +21,7 @@ import Footer from '../templateComponents/Footer';
 import getLPTheme from './getLPTheme';
 import TextToSpeech from '../templateComponents/TextToSpeech';
 import { QueryClient, QueryClientProvider } from 'react-query';
+import Scoring from '../templateComponents/Scoring';
 
 const defaultTheme = createTheme({});
 const queryClient = new QueryClient();
@@ -87,6 +88,8 @@ export default function LandingPage() {
         <Hero />
         <Divider />
         <TextToSpeech />
+        <Divider />
+        <Scoring />
         <Box sx={{ bgcolor: 'background.default' }}>
           {/*<LogoCollection />
           <Divider />

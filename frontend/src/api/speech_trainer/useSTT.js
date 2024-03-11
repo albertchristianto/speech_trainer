@@ -2,12 +2,13 @@ import axios from "axios";
 import { useMutation } from "react-query";
 import { getBackendUrl } from "../../utils/baseURL";
 
-const fetchSTT = (data) => {
+const fetchSTT = async (data, config = {}) => {
     try {
-        const response = axios.post(getBackendUrl(`/recognize_speech?lang=en`), data, {
+        const response = await axios.post(getBackendUrl(`/recognize_speech?lang=en`), data, {
             headers: {
                 'Content-Type': 'multipart/form-data',
-            }
+            },
+            ...config
         });
         return response.data;
     } catch (error) {
@@ -16,4 +17,4 @@ const fetchSTT = (data) => {
 };
 
 export const useSTT = () =>
-    useMutation(data => fetchSTT(data));
+    useMutation((data, config = {}) => fetchSTT(data, config));

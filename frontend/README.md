@@ -1,17 +1,41 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Getting Started
 
-## Getting Started
+This [React Web Application](https://react.dev/), built with [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-First, run the development server:
+## NodeJS installation
+
+First, download NodeJS v20.11.1 (during installing please allow NodeJS added itself to PATH automatically):
+
+```
+https://nodejs.org/dist/v20.11.1/node-v20.11.1-x64.msi
+```
+
+Check NodeJS if it's installed successfully through cmd/terminal:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+node -v
+npm -v
+```
+
+## Starting React Web Application
+
+Using cmd/terminal, go to root dir at frontend/ and run this command:
+
+```bash
+npm install
+```
+
+Finally, run the development server using either one of these command:
+
+```bash
+# Use this command if you install with npm (default)
+npm run dev 
+# Use this command if you install with yarn
+yarn dev 
+# Use this command if you install with pnpm
+pnpm dev 
+# Use this command if you install with bun
+bun dev 
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
