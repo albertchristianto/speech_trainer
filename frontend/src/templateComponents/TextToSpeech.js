@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { alpha } from '@mui/material';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
@@ -7,8 +6,8 @@ import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import AudioRecorder from "../components/AudioRecorder"
 import { useState, useRef } from "react";
+import { useTTS } from "../api/speech_trainer/useTTS";
 
 export default function TextToSpeech() {
 
@@ -16,10 +15,13 @@ export default function TextToSpeech() {
 
     const inputTextField = useRef(null);
 
+    const { mutate: createTTS, isLoading: isTTSLoading } = useTTS();
+
     const handleGenerateSpeech = () => {
         const text = inputTextField.current.value;
 
         //Set audio if audio generated successfully from backend
+        createTTS({ text }, { onSuccess: (data) => { console.log(data) }, onError: () => { console.error('error calling API') } });
         setAudio(true);
     }
 

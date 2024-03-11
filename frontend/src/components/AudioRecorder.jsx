@@ -2,6 +2,7 @@
 import { useState, useRef } from "react";
 import { Button, Typography, Stack, TextField, LinearProgress } from "@mui/material";
 import { Box } from "@mui/system";
+import { useSTT } from "../api/speech_trainer/useSTT";
 
 const mimeType = "audio/wav";
 
@@ -17,6 +18,8 @@ const AudioRecorder = () => {
     const [audio, setAudio] = useState(null);
 
     const [audioChunks, setAudioChunks] = useState([]);
+
+    const { mutate: createSTT, isLoading: isUpdateLoading } = useSTT();
 
     const getMicrophonePermission = async () => {
         if ("MediaRecorder" in window) {
@@ -65,6 +68,8 @@ const AudioRecorder = () => {
             setAudio(audioUrl);
 
             setAudioChunks([]);
+
+            createSTT({ file: audioBlob, text: 'test' });
         };
     };
 
