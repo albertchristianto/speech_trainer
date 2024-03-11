@@ -88,7 +88,7 @@ export default function LandingPage() {
         <Divider />
         <TextToSpeech />
         <Box sx={{ bgcolor: 'background.default' }}>
-          {/*<LogoCollection />*/}
+          {/*<LogoCollection />
           <Divider />
           <Features />
           <Divider />
@@ -98,7 +98,7 @@ export default function LandingPage() {
           <Divider />
           <Pricing />
           <Divider />
-          <FAQ />
+          <FAQ />*/}
           <Divider />
           <Footer />
         </Box>

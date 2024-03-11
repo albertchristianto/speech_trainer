@@ -40,7 +40,7 @@ export default function Footer() {
         textAlign: { sm: 'center', md: 'left' },
       }}
     >
-      <Box
+      {/*<Box
         sx={{
           display: 'flex',
           flexDirection: { xs: 'column', sm: 'row' },
@@ -58,13 +58,13 @@ export default function Footer() {
         >
           <Box sx={{ width: { xs: '100%', sm: '60%' } }}>
             <Box sx={{ ml: '-15px' }}>
-              {/*<img
+              <img
                 src={
                   'https://assets-global.website-files.com/61ed56ae9da9fd7e0ef0a967/61f12e6faf73568658154dae_SitemarkDefault.svg'
                 }
                 style={logoStyle}
                 alt="logo of sitemark"
-              />*/}
+              />
               <Typography variant="h6" sx={{
                 color: (theme) =>
                   theme.palette.mode === 'light' ? 'primary.main' : 'primary.light',
@@ -98,7 +98,7 @@ export default function Footer() {
                 Subscribe
               </Button>
             </Stack>
-          </Box>
+            </Box>
         </Box>
         <Box
           sx={{
@@ -166,15 +166,12 @@ export default function Footer() {
             Contact
           </Link>
         </Box>
-      </Box>
+      </Box>*/}
       <Box
         sx={{
           display: 'flex',
           justifyContent: 'space-between',
-          pt: { xs: 4, sm: 8 },
           width: '100%',
-          borderTop: '1px solid',
-          borderColor: 'divider',
         }}
       >
         <div>
@@ -224,6 +221,6 @@ export default function Footer() {
           </IconButton>
         </Stack>
       </Box>
-    </Container>
+    </Container >
   );
 }
