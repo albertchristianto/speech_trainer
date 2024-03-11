@@ -1,15 +1,22 @@
 import * as React from 'react';
 import { useState, useRef } from "react";
 import { Container, Grid, Typography, TextField, Button, Stack, Link } from '@mui/material';
+import { useGetScore } from '../api/speech_trainer/useGetScore';
 
 const Scoring = () => {
-    const groundTruthText = useRef(null);
-    const answerText = useRef(null);
+    const groundTruthText = useRef('');
+    const answerText = useRef('');
 
     const [score, setScore] = useState(null);
 
-    const handleGetScore = () => {
+    const { mutate: getScore, isLoading: isGetScoreLoading } = useGetScore();
 
+    const handleGetScore = () => {
+        getScore(
+            { ground_truth: groundTruthText.current.value, answer: answerText.current.value },
+            { onError: (error) => { console.error("error calling API") } }
+        );
+        setScore(1);
     }
 
     return (
@@ -43,7 +50,6 @@ const Scoring = () => {
                     Ground Truth
                     <TextField
                         id="ground-truth-text-input"
-                        label="Ground Truth"
                         multiline
                         rows={4}
                         sx={{ m: 1 }}
@@ -56,7 +62,6 @@ const Scoring = () => {
                     Answer
                     <TextField
                         id="answer-text-input"
-                        label="Answer"
                         multiline
                         rows={4}
                         sx={{ m: 1 }}
@@ -76,6 +81,10 @@ const Scoring = () => {
                 </Link>
                 .
             </Typography>
+            {score && (
+                <Typography variant="h3" textAlign="center" sx={{ opacity: 0.8, m: 1 }}>Score: {score || '0'}</Typography>
+            )}
+
         </Container>
     )
 }
