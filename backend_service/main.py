@@ -5,6 +5,7 @@ import random
 import uvicorn
 from fastapi import File, UploadFile, FastAPI, HTTPException
 from fastapi.responses import FileResponse
+from fastapi.middleware.cors import CORSMiddleware
 
 from loguru import logger
 
@@ -17,6 +18,18 @@ from common.text_normalizer.zh import zh_normalizer
 stt, tts = load_speech_model("cfgs/system.conf")
 app = FastAPI()
 TEMP_CACHE_PATH = "temp_cache"
+
+# Allow only requests from localhost:3000
+origins = ["http://localhost:3000"]
+
+# Include CORS middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.get("/generate_sample_audio")
 def text_to_speech_generate(text: str, lang: str = "zh"):

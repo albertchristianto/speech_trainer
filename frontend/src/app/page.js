@@ -20,9 +20,11 @@ import FAQ from '../templateComponents/FAQ';
 import Footer from '../templateComponents/Footer';
 import getLPTheme from './getLPTheme';
 import TextToSpeech from '../templateComponents/TextToSpeech';
+import { QueryClient, QueryClientProvider } from 'react-query';
+import Scoring from '../templateComponents/Scoring';
 
 const defaultTheme = createTheme({});
-
+const queryClient = new QueryClient();
 function ToggleCustomTheme({ showCustomTheme, toggleCustomTheme }) {
   return (
     <Box
@@ -79,31 +81,35 @@ export default function LandingPage() {
   };
 
   return (
-    <ThemeProvider theme={showCustomTheme ? LPtheme : defaultTheme}>
-      <CssBaseline />
-      <AppAppBar mode={mode} toggleColorMode={toggleColorMode} />
-      <Hero />
-      <Divider />
-      <TextToSpeech />
-      <Box sx={{ bgcolor: 'background.default' }}>
-        {/*<LogoCollection />*/}
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider theme={showCustomTheme ? LPtheme : defaultTheme}>
+        <CssBaseline />
+        <AppAppBar mode={mode} toggleColorMode={toggleColorMode} />
+        <Hero />
         <Divider />
-        <Features />
+        <TextToSpeech />
         <Divider />
-        <Testimonials />
-        <Divider />
-        <Highlights />
-        <Divider />
-        <Pricing />
-        <Divider />
-        <FAQ />
-        <Divider />
-        <Footer />
-      </Box>
-      {/*<ToggleCustomTheme
+        <Scoring />
+        <Box sx={{ bgcolor: 'background.default' }}>
+          {/*<LogoCollection />
+          <Divider />
+          <Features />
+          <Divider />
+          <Testimonials />
+          <Divider />
+          <Highlights />
+          <Divider />
+          <Pricing />
+          <Divider />
+          <FAQ />*/}
+          <Divider />
+          <Footer />
+        </Box>
+        {/*<ToggleCustomTheme
         showCustomTheme={showCustomTheme}
         toggleCustomTheme={toggleCustomTheme}
   />*/}
-    </ThemeProvider>
+      </ThemeProvider>
+    </QueryClientProvider>
   );
 }

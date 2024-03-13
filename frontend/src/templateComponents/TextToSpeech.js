@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { alpha } from '@mui/material';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
@@ -7,20 +6,32 @@ import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import AudioRecorder from "../components/AudioRecorder"
 import { useState, useRef } from "react";
+import { useTTS } from "../api/speech_trainer/useTTS";
+import { CircularProgress } from '@mui/material';
 
 export default function TextToSpeech() {
 
     const [audio, setAudio] = useState(null);
 
+    const [isGenerating, setIsGenerating] = useState(false);
+
     const inputTextField = useRef(null);
 
+    const { mutate: createTTS, isLoading: isTTSLoading } = useTTS();
+
     const handleGenerateSpeech = () => {
+        setIsGenerating(true);
         const text = inputTextField.current.value;
 
         //Set audio if audio generated successfully from backend
-        setAudio(true);
+        createTTS({ text: text }, {
+            onSuccess: (response) => {
+                const audioBlob = new Blob([response.data], { type: 'audio/wav' })
+                const audioUrl = URL.createObjectURL(audioBlob);
+                setAudio(audioUrl);
+            }
+        });
     }
 
     return (
@@ -86,7 +97,7 @@ export default function TextToSpeech() {
                         <Button variant="contained" color="primary" onClick={handleGenerateSpeech} type="button" sx={{ mb: 1 }} >
                             Generate Speech
                         </Button>
-                        {audio ? <center><audio src={null} controls></audio></center> : null}
+                        {isGenerating ? !isTTSLoading ? (<center><audio src={audio} controls></audio></center>) : (<center><CircularProgress /></center>) : null}
                     </Stack>
                     <Typography variant="caption" textAlign="center" sx={{ opacity: 0.8 }}>
                         By clicking &quot;Generate Speech&quot; you agree to our&nbsp;
