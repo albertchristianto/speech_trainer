@@ -14,9 +14,11 @@ const Scoring = () => {
     const handleGetScore = () => {
         getScore(
             { ground_truth: groundTruthText.current.value, answer: answerText.current.value },
-            { onError: (error) => { console.error("error calling API") } }
+            {
+                onSuccess: (data) => { console.log(data); setScore(data.score) },
+            }
         );
-        setScore(1);
+        //setScore(1);
     }
 
     return (
@@ -71,7 +73,7 @@ const Scoring = () => {
                     />
                 </Grid>
             </Grid>
-            <Button variant="contained" color="primary" onClick={handleGetScore} type="button" sx={{ m: 1, width: { xs: '100%', sm: '50%' } }} >
+            <Button variant="contained" color="primary" onClick={handleGetScore} type="button" sx={{ m: 1, width: { xs: '100%', sm: '35%' } }} >
                 Get Score
             </Button>
             <Typography variant="caption" textAlign="center" sx={{ opacity: 0.8 }}>

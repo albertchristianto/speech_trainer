@@ -4,8 +4,8 @@ import { getBackendUrl } from "../../utils/baseURL";
 
 const fetchTTS = async (data, config = {}) => {
     try {
-        const response = await axios.get(getBackendUrl(`/generate_sample_audio?lang=en`), { params: data }, config);
-        return response.data;
+        const response = await axios.get(getBackendUrl(`/generate_sample_audio?lang=en`), { params: data, responseType: 'blob' }, { ...config });
+        return response;
     } catch (error) {
         throw new Error("Failed to fetch TTS");
     }

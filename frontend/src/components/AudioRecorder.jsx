@@ -1,76 +1,45 @@
 'use client'
 import { useState, useRef } from "react";
-import { Button, Typography, Stack, TextField, LinearProgress } from "@mui/material";
+import { Button, Typography, Stack, TextField, LinearProgress, CircularProgress } from "@mui/material";
 import { Box } from "@mui/system";
 import { useSTT } from "../api/speech_trainer/useSTT";
-
-const mimeType = "audio/wav";
+import Recorder from "../utils/audioRecorder";
 
 const AudioRecorder = () => {
-    const [permission, setPermission] = useState(false);
-
-    const mediaRecorder = useRef(null);
 
     const [recordingStatus, setRecordingStatus] = useState("inactive");
 
-    const [stream, setStream] = useState(null);
-
     const [audio, setAudio] = useState(null);
 
-    const [audioChunks, setAudioChunks] = useState([]);
+    const { mutate: createSTT, isLoading: isSTTLoading } = useSTT();
 
-    const { mutate: createSTT, isLoading: isUpdateLoading } = useSTT();
+    const [recorder, setRecorder] = useState(null);
 
-    const getMicrophonePermission = async () => {
-        if ("MediaRecorder" in window) {
-            try {
-                const mediaStream = await navigator.mediaDevices.getUserMedia({
-                    audio: true,
-                    video: false,
-                });
-                setPermission(true);
-                setStream(mediaStream);
-            } catch (err) {
-                alert(err.message);
-            }
-        } else {
-            alert("The MediaRecorder API is not supported in your browser.");
-        }
-    };
+    const [generatedTextInput, setGeneratedTextInput] = useState('');
+
+    const [isGenerateText, setIsGenerateText] = useState(false);
 
     const startRecording = async () => {
         setRecordingStatus("recording");
-        const media = new MediaRecorder(stream, { type: mimeType });
+        const recorderStream = new Recorder();
 
-        mediaRecorder.current = media;
-
-        mediaRecorder.current.start();
-
-        let localAudioChunks = [];
-
-        mediaRecorder.current.ondataavailable = (event) => {
-            if (typeof event.data === "undefined") return;
-            if (event.data.size === 0) return;
-            localAudioChunks.push(event.data);
-        };
-
-        setAudioChunks(localAudioChunks);
+        await recorderStream.start();
+        setRecorder(recorderStream);
+        setIsGenerateText(false);
     };
 
-    const stopRecording = () => {
+    const stopRecording = async () => {
         setRecordingStatus("inactive");
-        mediaRecorder.current.stop();
-
-        mediaRecorder.current.onstop = () => {
-            const audioBlob = new Blob(audioChunks, { type: mimeType });
-            const audioUrl = URL.createObjectURL(audioBlob);
-
-            setAudio(audioUrl);
-
-            setAudioChunks([]);
-
-            createSTT({ file: audioBlob, text: 'test' }, { onError: (error) => { console.error('error calling API'); } });
-        };
+        await recorder.stop();
+        setAudio(recorder.audioUrl);
+        // console.log(recorder.audioUrl);
+        // console.log(recorder.audioBlob);
+        createSTT({ file: recorder.audioBlob }, {
+            onSuccess: (response) => {
+                setGeneratedTextInput(response.text);
+            }
+        });
+        setIsGenerateText(true);
     };
 
     return (
@@ -82,12 +51,7 @@ const AudioRecorder = () => {
             useFlexGap
             sx={{ pt: 2, width: { xs: '100%', sm: '50%' } }}>
             <Typography variant="h2" gutterBottom sx={{ display: 'none' }}>Audio Recorder</Typography>
-            {!permission ? (
-                <Button variant="contained" color="primary" onClick={getMicrophonePermission} type="button">
-                    Click to Turn On Microphone
-                </Button>
-            ) : null}
-            {permission && recordingStatus === "inactive" ? (
+            {recordingStatus === "inactive" ? (
                 <Button variant="contained" color="primary" onClick={startRecording} type="button">
                     Start Recording
                 </Button>
@@ -99,21 +63,19 @@ const AudioRecorder = () => {
             ) : null}
 
             {recordingStatus === 'recording' && < LinearProgress sx={{ mt: 1 }} />}
-            {audio && recordingStatus === 'inactive' ? (
+            {isGenerateText ? isSTTLoading ? (<center><CircularProgress /></center>) : (
                 <Box sx={{ width: '100%' }} direction={{ xs: 'column', sm: 'column' }}>
                     <center><audio src={audio} controls></audio></center>
-                    <Button variant="contained" color="primary" download href={audio} fullWidth>
-                        Download Recording
-                    </Button>
+                    Result
                     <TextField
                         id="generated-text"
-                        label="Generated Text"
                         multiline
                         rows={4}
                         sx={{ m: 1 }}
                         placeholder="Generated Text will be shown here."
                         fullWidth
                         disabled
+                        value={generatedTextInput}
                     />
                 </Box>
             ) : null
