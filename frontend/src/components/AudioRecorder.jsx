@@ -4,6 +4,8 @@ import { Button, Typography, Stack, TextField, LinearProgress, CircularProgress 
 import { Box } from "@mui/system";
 import { useSTT } from "../api/speech_trainer/useSTT";
 import Recorder from "../utils/audioRecorder";
+import LanguageSelector from "./LanguageSelector";
+import { LANG } from "../constant";
 
 const AudioRecorder = () => {
 
@@ -18,6 +20,12 @@ const AudioRecorder = () => {
     const [generatedTextInput, setGeneratedTextInput] = useState('');
 
     const [isGenerateText, setIsGenerateText] = useState(false);
+
+    const [lang, setLang] = useState(LANG.ENGLISH.value);
+
+    const handleLanguageChange = (event) => {
+        setLang(event.target.value);
+    };
 
     const startRecording = async () => {
         setRecordingStatus("recording");
@@ -34,7 +42,9 @@ const AudioRecorder = () => {
         setAudio(recorder.audioUrl);
         // console.log(recorder.audioUrl);
         // console.log(recorder.audioBlob);
-        createSTT({ file: recorder.audioBlob }, {
+        createSTT({
+            data: { file: recorder.audioBlob }, lang: lang
+        }, {
             onSuccess: (response) => {
                 setGeneratedTextInput(response.text);
             }
@@ -52,9 +62,12 @@ const AudioRecorder = () => {
             sx={{ pt: 2, width: { xs: '100%', sm: '50%' } }}>
             <Typography variant="h2" gutterBottom sx={{ display: 'none' }}>Audio Recorder</Typography>
             {recordingStatus === "inactive" ? (
-                <Button variant="contained" color="primary" onClick={startRecording} type="button">
-                    Start Recording
-                </Button>
+                <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }} flexDirection={{ xs: 'column', sm: 'row' }} >
+                    <LanguageSelector onChange={handleLanguageChange} value={lang} />
+                    <Button variant="contained" color="primary" onClick={startRecording} type="button">
+                        Start Recording
+                    </Button>
+                </Box>
             ) : null}
             {recordingStatus === "recording" ? (
                 <Button variant="contained" color="primary" onClick={stopRecording} type="button">

@@ -478,7 +478,7 @@ export default function getLPTheme(mode) {
             backgroundImage: 'none',
             backgroundColor: gray[100],
             ...(theme.palette.mode === 'dark' && {
-              backgroundColor: alpha(gray[900], 0.6),
+              backgroundColor: alpha(gray[900], 1),
             }),
           }),
         },
