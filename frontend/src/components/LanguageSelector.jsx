@@ -1,9 +1,9 @@
 import { FormControl, InputLabel, Select, MenuItem } from "@mui/material";
 import { LANG } from "../constant";
 
-const LanguageSelector = ({ value = LANG.ENGLISH.value, onChange }) => {
+const LanguageSelector = ({ value = LANG.ENGLISH.value, onChange, width = '50%' }) => {
     return (
-        <FormControl variant="standard" sx={{ m: 1, width: { xs: '100%', sm: '50%' } }}>
+        <FormControl variant="standard" sx={{ m: 1, width: { xs: '100%', sm: `${width}` } }}>
             <InputLabel id="language-selector-input-label">Language</InputLabel>
             <Select
                 labelId="language-selector-label"

@@ -2,7 +2,7 @@ import axios from "axios";
 import { useMutation } from "react-query";
 import { getBackendUrl } from "../../utils/baseURL";
 
-const fetchSTT = async (data, lang, config = {}) => {
+const fetchSTT = async (data, config = {}) => {
     try {
         const response = await axios.post(getBackendUrl(`/recognize_speech?lang=${data?.lang}`), data?.data, {
             headers: {

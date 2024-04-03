@@ -4,7 +4,7 @@ import { getBackendUrl } from "../../utils/baseURL";
 
 const fetchGetScore = async (data, config = {}) => {
     try {
-        const response = await axios.get(getBackendUrl(`/get_score?lang=en`), { params: data }, config);
+        const response = await axios.get(getBackendUrl(`/get_score?lang=${data?.lang}`), { params: data?.data }, config);
         return response.data;
     } catch (error) {
         throw new Error("Failed to fetch Get Score");

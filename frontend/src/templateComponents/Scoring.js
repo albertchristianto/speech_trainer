@@ -1,7 +1,9 @@
 import * as React from 'react';
 import { useState, useRef } from "react";
-import { Container, Grid, Typography, TextField, Button, Stack, Link } from '@mui/material';
+import { Container, Grid, Typography, TextField, Button, Stack, Link, Box } from '@mui/material';
 import { useGetScore } from '../api/speech_trainer/useGetScore';
+import LanguageSelector from '../components/LanguageSelector';
+import { LANG } from '../constant';
 
 const Scoring = () => {
     const groundTruthText = useRef('');
@@ -11,9 +13,15 @@ const Scoring = () => {
 
     const { mutate: getScore, isLoading: isGetScoreLoading } = useGetScore();
 
+    const [lang, setLang] = useState(LANG.ENGLISH.value);
+
+    const handleLanguageSelector = (event) => {
+        setLang(event.target.value);
+    }
+
     const handleGetScore = () => {
         getScore(
-            { ground_truth: groundTruthText.current.value, answer: answerText.current.value },
+            { data: { ground_truth: groundTruthText.current.value, answer: answerText.current.value }, lang: lang },
             {
                 onSuccess: (data) => { console.log(data); setScore(data.score) },
             }
@@ -73,9 +81,12 @@ const Scoring = () => {
                     />
                 </Grid>
             </Grid>
-            <Button variant="contained" color="primary" onClick={handleGetScore} type="button" sx={{ m: 1, width: { xs: '100%', sm: '35%' } }} >
-                Get Score
-            </Button>
+            <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }} flexDirection={{ xs: 'column', sm: 'row' }} >
+                <LanguageSelector onChange={handleLanguageSelector} value={lang} width='25%' />
+                <Button variant="contained" color="primary" onClick={handleGetScore} type="button" sx={{ m: 1, width: { xs: '100%', sm: '35%' } }} >
+                    Get Score
+                </Button>
+            </Box >
             <Typography variant="caption" textAlign="center" sx={{ opacity: 0.8 }}>
                 By clicking &quot;Get Score&quot; you agree to our&nbsp;
                 <Link href="#" color="primary">
@@ -83,11 +94,13 @@ const Scoring = () => {
                 </Link>
                 .
             </Typography>
-            {score && (
-                <Typography variant="h3" textAlign="center" sx={{ opacity: 0.8, m: 1 }}>Score: {score || '0'}</Typography>
-            )}
+            {
+                score && (
+                    <Typography variant="h3" textAlign="center" sx={{ opacity: 0.8, m: 1 }}>Score: {score || '0'}</Typography>
+                )
+            }
 
-        </Container>
+        </Container >
     )
 }
 
