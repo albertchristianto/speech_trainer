@@ -19,28 +19,18 @@ stt, tts = load_speech_model("cfgs/system.conf")
 app = FastAPI()
 TEMP_CACHE_PATH = "temp_cache"
 
-# Allow only requests from localhost:3000
-origins = ["http://localhost:3000"]
+origins = ["http://localhost:3000"]# Allow only requests from localhost:3000
+app.add_middleware(CORSMiddleware, allow_origins=origins, allow_credentials=True, allow_methods=["*"], allow_headers=["*"])# Include CORS middleware
 
-# Include CORS middleware
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=origins,
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
-@app.get("/generate_sample_audio")
+@app.get("/generate_sample_audio", summary="Text to Speech Engine", description="Generate the speech from text. Currently, it supports Chinese(zh) and English(en).")
 def text_to_speech_generate(text: str, lang: str = "zh"):
   if not os.path.exists(TEMP_CACHE_PATH):
     os.makedirs(TEMP_CACHE_PATH)
-  ref_wav_path = f"rsc/{lang}_female.wav" if random.random() > 0.5 else f"rsc/{lang}_male.wav"
+  
   out_filename = f"{time.time()}_ning.wav"
   output_path = os.path.join(TEMP_CACHE_PATH, out_filename)
   try:
-    the_wave = tts.forward(input_text=text, lang=lang, ref_wav_file_path=ref_wav_path)
-    tts.to_wav(the_wave, output_path=output_path)
+    tts.forward(input_text=text, lang=lang, output_path=output_path)
   except Exception as e:
     msg = "oops! what had just happened?!"
     logger.error(f"{msg}")
@@ -48,7 +38,7 @@ def text_to_speech_generate(text: str, lang: str = "zh"):
     raise HTTPException(status_code=500, detail= f"{msg}\nHere is the the error message from the server for you to tell the admin!!!\n{e}")
   return FileResponse(path=output_path, media_type="audio/wav", filename=out_filename)
 
-@app.post("/recognize_speech")
+@app.post("/recognize_speech", summary="Speech to Text Engine", description="Recognize the speech from an audio file. Currently, it supports Chinese(zh) and English(en).")
 def speech_to_text_recognize(file: UploadFile = File(...), lang: str="zh"):
   if not os.path.exists(TEMP_CACHE_PATH):
     os.makedirs(TEMP_CACHE_PATH)
@@ -74,6 +64,22 @@ def sentences_comparator(ground_truth: str, answer: str, lang: str):
     answer = en_normalizer(answer)
   score = wer(ground_truth.split(), answer.split())
   return { "msg": "Success!", "score": score}
+
+@app.post("/do_speech_training", summary="Speech Training Engine", description="Automatically score your audio speech file. Currently, it supports Chinese(zh) and English(en).")
+def speech_training(text: str, file: UploadFile = File(...), lang: str="zh"):
+  if not os.path.exists(TEMP_CACHE_PATH):
+    os.makedirs(TEMP_CACHE_PATH)
+  ret, val = save_audio_file(file=file)# return file_name when successfully save the audio files
+  if not ret:
+    return { "text":"", "msg": val }
+  try:
+    res = stt.forward(val, lang=lang)
+  except Exception as e:
+    msg = "oops! what had just happened?!"
+    logger.error(f"{msg}")
+    logger.error(f"{e}")
+    return { "text":"", "msg": f"{msg}\nHere is the the error message from the server for you to tell the admin!!!\n{e}"}
+  return { "msg": "Success!", "text": res }
 
 @app.get("/")
 async def home(): 

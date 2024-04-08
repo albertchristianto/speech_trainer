@@ -3,11 +3,14 @@ sys.path.append('.')
 import json
 from models.whisper import Whisper
 from models.xttsv2 import XttsV2
+from models.tacotronv2 import Tacotronv2
 import time
 
 def get_tts_models(model_name, weight_dir_path, use_gpu):
   if model_name == "xttsv2":
     return XttsV2(weight_dir_path, use_gpu)
+  elif model_name == "tacotronv2":
+    return Tacotronv2(weight_dir_path, use_gpu)
   return None
 
 def get_stt_models(model_name, weight_dir_path, use_gpu):
