@@ -11,7 +11,7 @@ from loguru import logger
 
 from models import load_speech_model
 from common.utils import save_audio_file
-from common.wer import wer
+from common.evaluator import SpeechEvaluator
 from common.text_normalizer.en import en_normalizer
 from common.text_normalizer.zh import zh_normalizer
 

@@ -1,4 +1,5 @@
 streamlit_/
+debug/
 temp_cache/
 weights/
 ref_voices/

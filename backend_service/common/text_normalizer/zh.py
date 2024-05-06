@@ -1,7 +1,6 @@
 import opencc
 
 from common.text_normalizer.cn_tn import TextNorm
-from common.text_normalizer.utils import remove_space_before_after_text
 
 CONVERTER = opencc.OpenCC('s2tw.json')
 
@@ -12,5 +11,5 @@ ZH_BASIC_NORMALIZER = TextNorm(to_banjiao = False, to_upper = False, to_lower = 
 def zh_normalizer(text):
     text = ZH_BASIC_NORMALIZER(text)
     text = CONVERTER.convert(text)
-    text = remove_space_before_after_text(text)
+    text = text.strip()
     return text

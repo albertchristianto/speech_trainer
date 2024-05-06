@@ -1,13 +1,11 @@
-from transformers.models.whisper.english_normalizer import BasicTextNormalizer
+from transformers.models.whisper.english_normalizer import EnglishTextNormalizer
 
-from common.text_normalizer.utils import remove_space_before_after_text
-
-EN_BASIC_NORMALIZER = BasicTextNormalizer()
+EN_BASIC_NORMALIZER = EnglishTextNormalizer()
 
 def en_normalizer(text):
     text = text.lower()
     text = EN_BASIC_NORMALIZER(text)
-    text = remove_space_before_after_text(text)
+    text = text.strip()
     return text
 
 if __name__ == "__main__":

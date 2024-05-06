@@ -10,3 +10,5 @@ uvicorn[standard]
 loguru
 python-multipart
 TTS==0.22.0
+evaluate
+jiwer
