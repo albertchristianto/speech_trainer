@@ -7,7 +7,7 @@ from common.text_normalizer.zh import zh_normalizer
 
 class SpeechEvaluator:
   def __init__(self) -> None:
-    self.metric = evaluate.load("wer")
+    self.metric = evaluate.load(f'common/cer.py')
 
   def preprocess_zh(self, sentences, out):
     for each_sntncs in sentences:
@@ -38,8 +38,12 @@ class SpeechEvaluator:
 
 if __name__ == "__main__":
   speech_evaluator = SpeechEvaluator()
-  pred_str = [ "揍幹排骨湯六粉" ]
-  label_str = [ "豆乾排骨湯六份" ]
+  pred_str = [ "豆乾排骨湯六粉",
+               "揍幹排骨湯六粉",
+               "豆乾排骨湯六份" ]
+  label_str = [ "豆乾排骨湯六份",
+                "豆乾排骨湯六份",
+                "豆乾排骨湯六份"]
   print(speech_evaluator(pred_str, label_str, "zh"))
   pred_str = [ "tish is a test",
                "my name is you",

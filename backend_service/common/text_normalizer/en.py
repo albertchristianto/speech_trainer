@@ -1,6 +1,6 @@
-from transformers.models.whisper.english_normalizer import EnglishTextNormalizer
+from transformers.models.whisper.english_normalizer import BasicTextNormalizer
 
-EN_BASIC_NORMALIZER = EnglishTextNormalizer()
+EN_BASIC_NORMALIZER = BasicTextNormalizer()
 
 def en_normalizer(text):
     text = text.lower()
