@@ -4,7 +4,7 @@ import { getBackendUrl } from "../../utils/baseURL";
 
 const fetchSTT = async (data, config = {}) => {
     try {
-        const response = await axios.post(getBackendUrl(`/recognize_speech?lang=en`), data, {
+        const response = await axios.post(getBackendUrl(`/recognize_speech?lang=${data?.lang}`), data?.data, {
             headers: {
                 'Content-Type': 'multipart/form-data',
             },

@@ -9,6 +9,8 @@ import Typography from '@mui/material/Typography';
 import { useState, useRef } from "react";
 import { useTTS } from "../api/speech_trainer/useTTS";
 import { CircularProgress } from '@mui/material';
+import LanguageSelector from '../components/LanguageSelector';
+import { LANG } from '../constant';
 
 export default function TextToSpeech() {
 
@@ -20,12 +22,18 @@ export default function TextToSpeech() {
 
     const { mutate: createTTS, isLoading: isTTSLoading } = useTTS();
 
+    const [lang, setLang] = useState(LANG.ENGLISH.value);
+
+    const handleLanguageSelector = (event) => {
+        setLang(event.target.value);
+    }
+
     const handleGenerateSpeech = () => {
         setIsGenerating(true);
         const text = inputTextField.current.value;
 
         //Set audio if audio generated successfully from backend
-        createTTS({ text: text }, {
+        createTTS({ data: { text: text }, lang: lang }, {
             onSuccess: (response) => {
                 const audioBlob = new Blob([response.data], { type: 'audio/wav' })
                 const audioUrl = URL.createObjectURL(audioBlob);
@@ -94,9 +102,12 @@ export default function TextToSpeech() {
                         useFlexGap
                         sx={{ pt: 2, width: { xs: '100%', sm: '50%' } }}
                     >
-                        <Button variant="contained" color="primary" onClick={handleGenerateSpeech} type="button" sx={{ mb: 1 }} >
-                            Generate Speech
-                        </Button>
+                        <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }} flexDirection={{ xs: 'column', sm: 'row' }} >
+                            <LanguageSelector onChange={handleLanguageSelector} value={lang} />
+                            <Button variant="contained" color="primary" onClick={handleGenerateSpeech} type="button" sx={{ mb: 1 }} >
+                                Generate Speech
+                            </Button>
+                        </Box>
                         {isGenerating ? !isTTSLoading ? (<center><audio src={audio} controls></audio></center>) : (<center><CircularProgress /></center>) : null}
                     </Stack>
                     <Typography variant="caption" textAlign="center" sx={{ opacity: 0.8 }}>
