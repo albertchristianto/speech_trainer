@@ -1,8 +1,8 @@
 import os
 import sys
 import time
-import random
-import uvicorn
+
+from contextlib import asynccontextmanager
 from fastapi import File, UploadFile, FastAPI, HTTPException
 from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
@@ -15,10 +15,19 @@ from common.evaluator import SpeechEvaluator
 from common.text_normalizer.en import en_normalizer
 from common.text_normalizer.zh import zh_normalizer
 
-stt, tts = load_speech_model("cfgs/system.conf")
-app = FastAPI()
+dl_models = {}
 TEMP_CACHE_PATH = "temp_cache"
 
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+  # Load the ML model
+  dl_models["stt"], dl_models["tts"] = load_speech_model("cfgs/system.conf")
+  dl_models["cer"] = SpeechEvaluator()
+  yield
+  # Clean up the ML models and release the resources
+  dl_models.clear()
+
+app = FastAPI(lifespan=lifespan)
 origins = ["http://localhost:3000"]# Allow only requests from localhost:3000
 app.add_middleware(CORSMiddleware, allow_origins=origins, allow_credentials=True, allow_methods=["*"], allow_headers=["*"])# Include CORS middleware
 
@@ -30,7 +39,7 @@ def text_to_speech_generate(text: str, lang: str = "zh"):
   out_filename = f"{time.time()}_ning.wav"
   output_path = os.path.join(TEMP_CACHE_PATH, out_filename)
   try:
-    tts.forward(input_text=text, lang=lang, output_path=output_path)
+    dl_models["tts"].forward(input_text=text, lang=lang, output_path=output_path)
   except Exception as e:
     msg = "oops! what had just happened?!"
     logger.error(f"{msg}")
@@ -46,7 +55,7 @@ def speech_to_text_recognize(file: UploadFile = File(...), lang: str="zh"):
   if not ret:
     return { "text":"", "msg": val }
   try:
-    res = stt.forward(val, lang=lang)
+    res = dl_models["stt"].forward(val, lang=lang)
   except Exception as e:
     msg = "oops! what had just happened?!"
     logger.error(f"{msg}")
@@ -62,7 +71,7 @@ def sentences_comparator(ground_truth: str, answer: str, lang: str):
   else:
     ground_truth = en_normalizer(ground_truth)
     answer = en_normalizer(answer)
-  score = wer(ground_truth.split(), answer.split())
+  score = dl_models["cer"]([ground_truth], [answer], lang)
   return { "msg": "Success!", "score": score}
 
 @app.post("/do_speech_training", summary="Speech Training Engine", description="Automatically score your audio speech file. Currently, it supports Chinese(zh) and English(en).")
@@ -73,7 +82,7 @@ def speech_training(text: str, file: UploadFile = File(...), lang: str="zh"):
   if not ret:
     return { "text":"", "msg": val }
   try:
-    res = stt.forward(val, lang=lang)
+    res = dl_models["stt"].forward(val, lang=lang)
   except Exception as e:
     msg = "oops! what had just happened?!"
     logger.error(f"{msg}")
