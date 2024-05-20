@@ -1,6 +1,7 @@
 import os
 import sys
 import time
+import uvicorn
 
 from contextlib import asynccontextmanager
 from fastapi import File, UploadFile, FastAPI, HTTPException
@@ -83,12 +84,13 @@ def speech_training(text: str, file: UploadFile = File(...), lang: str="zh"):
     return { "text":"", "msg": val }
   try:
     res = dl_models["stt"].forward(val, lang=lang)
+    score = dl_models["cer"]([text], res, lang)
   except Exception as e:
     msg = "oops! what had just happened?!"
     logger.error(f"{msg}")
     logger.error(f"{e}")
     return { "text":"", "msg": f"{msg}\nHere is the the error message from the server for you to tell the admin!!!\n{e}"}
-  return { "msg": "Success!", "text": res }
+  return { "msg": "Success!", "score": score, "text": res }
 
 @app.get("/")
 async def home(): 

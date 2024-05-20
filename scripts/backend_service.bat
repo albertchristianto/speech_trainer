@@ -1,2 +1,2 @@
 cd backend_service
-uvicorn main:app --port 8000
+C:\ProgramData\Miniconda3\envs\speech_trainer\Scripts\uvicorn main:app --port 8000
