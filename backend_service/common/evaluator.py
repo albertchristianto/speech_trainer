@@ -34,7 +34,7 @@ class SpeechEvaluator:
       gt = self.preprocess_en(label_strs, gt)
       pred = self.preprocess_en(pred_strs, pred)
 
-    return 100 * self.metric.compute(predictions=pred, references=gt)
+    return 100 * (1 - self.metric.compute(predictions=pred, references=gt))
 
 if __name__ == "__main__":
   speech_evaluator = SpeechEvaluator()

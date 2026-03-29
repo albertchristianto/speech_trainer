@@ -7,8 +7,14 @@ pydub
 accelerate
 fastapi
 uvicorn[standard]
-loguru
 python-multipart
-TTS==0.22.0
 evaluate
 jiwer
+
+loguru==0.7.3
+kokoro==0.9.4
+soundfile==0.13.1
+ordered-set==4.1.0
+pypinyin==0.55.0
+cn2an==0.5.23
+jieba==0.42.1
