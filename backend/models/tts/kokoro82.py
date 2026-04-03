@@ -1,13 +1,11 @@
 import os
-
 import sys
 
 sys.path.append(os.path.join(os.path.dirname(__file__), "../.."))
-import torch
 import opencc
-
-from kokoro import KPipeline
 import soundfile as sf
+import torch
+from kokoro import KPipeline
 from loguru import logger
 
 from models.tts.tts import Text2SpeechInterface

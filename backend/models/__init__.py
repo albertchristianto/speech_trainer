@@ -1,7 +1,7 @@
 import json
 
-from models.tts import get_tts_models
 from models.stt import get_stt_models
+from models.tts import get_tts_models
 
 
 def load_speech_model(config_path):

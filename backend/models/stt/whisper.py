@@ -1,10 +1,11 @@
 import sys
 
 sys.path.append(".")
-import opencc
 import numpy as np
-from transformers import WhisperProcessor, WhisperForConditionalGeneration
+import opencc
 from pydub import AudioSegment
+from transformers import WhisperForConditionalGeneration, WhisperProcessor
+
 from models.stt.stt import Speech2TextInterface
 
 
