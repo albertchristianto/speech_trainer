@@ -1,0 +1,16 @@
+[lint]
+extend-select = ["I", "T100"]  # Enable import sorting rules
+ignore = ["E402", "F841", "F541"]
+
+### For rule setting :  https://docs.astral.sh/ruff/rules/ ###
+# E402 : module-import-not-at-top-of-file
+# I001 : unsorted-imports 
+# F541 : [*] f-string without any placeholders
+# F841 : Local variable assigned to but never used
+
+[lint.isort]
+# known-first-party = ["my_project"]  # Treat "my_project" as a first-party module
+# known-third-party = ["numpy", "pandas"]  # Explicitly categorize third-party libraries
+force-single-line = false  # Disable forcing single-line imports
+combine-as-imports = true  # Merge "import a as b" into one line
+split-on-trailing-comma = false  # Don't split imports after trailing commas
