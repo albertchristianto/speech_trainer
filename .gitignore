@@ -1,4 +1,5 @@
-streamlit_/
+*.wav
+streamlit/
 debug/
 temp_cache/
 weights/

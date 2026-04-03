@@ -1,0 +1,18 @@
+python-multipart==0.0.22
+accelerate==1.13.0
+evaluate==0.4.6
+jiwer==4.0.0
+pydub==0.25.1
+loguru==0.7.3
+kokoro==0.9.4
+soundfile==0.13.1
+ordered-set==4.1.0
+pypinyin==0.55.0
+cn2an==0.5.23
+jieba==0.42.1
+opencc==1.2.0
+fastapi==0.135.2
+uvicorn[standard]==0.42.0
+torch==2.8.0 --index-url https://download.pytorch.org/whl/cu129
+torchvision==0.23.0
+torchaudio==2.8.0 
