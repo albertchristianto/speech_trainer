@@ -22,7 +22,7 @@ start.bat
 
 Each time you clone this repository, and after do 
 ```
-pip install -r requirements.txt
+pip install -r requirements-dev.txt
 ```
 You must run `pre-commit install` to set up the pre-commit hooks. This step is required only for the initial setup.
 
