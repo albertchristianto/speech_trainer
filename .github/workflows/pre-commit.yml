@@ -1,0 +1,48 @@
+name: Ruff Lint & Format
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: write  # ✅ This grants permission to push changes
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}  # ✅ Uses GitHub token with proper permissions
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          pip install ruff pre-commit
+
+      # - name: Run Ruff Linter
+      #   run: ruff check .
+
+      # - name: Run Ruff Format Check
+      #   run: ruff format --check .
+
+      - name: Fix issues with Ruff
+        run: |
+          ruff check . --fix
+          ruff format .
+
+      - name: Run pre-commit (optional)
+        run: pre-commit run --all-files || true
+
+      - name: Commit fixed files
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "Auto-fix linting issues with Ruff"
+          branch: ${{ github.head_ref }}
+          file_pattern: "*.py"
+      
