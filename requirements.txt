@@ -15,4 +15,5 @@ fastapi==0.135.2
 uvicorn[standard]==0.42.0
 torch==2.8.0 --index-url https://download.pytorch.org/whl/cu129
 torchvision==0.23.0
-torchaudio==2.8.0 
+torchaudio==2.8.0
+kaldi-native-fbank==1.22.3

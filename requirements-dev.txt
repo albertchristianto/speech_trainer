@@ -2,3 +2,5 @@
 
 pre-commit
 ruff
+openai-whisper==20250625
+sounddevice==0.5.5
