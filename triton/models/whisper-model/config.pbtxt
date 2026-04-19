@@ -1,0 +1,42 @@
+name: "whisper"
+backend: "python"
+max_batch_size: 8
+
+input [
+  {
+    name: "AUDIO_ARRAY"
+    data_type: TYPE_FP32
+    dims: [ -1 ]
+  },
+  {
+    name: "SAMPLE_RATE"
+    data_type: TYPE_INT32
+    dims: [ 1 ]
+  }
+]
+
+output [
+  {
+    name: "TRANSCRIPTION"
+    data_type: TYPE_STRING
+    dims: [ 1 ]
+  }
+]
+
+dynamic_batching {
+  preferred_batch_size: [ 1, 4, 8 ]
+  max_queue_delay_microseconds: 10000
+}
+
+instance_group [
+  {
+    count: 1
+    kind: KIND_GPU
+    gpus: [ 0 ]
+  }
+]
+
+parameters {
+  key: "model_name"
+  value: { string_value: "openai/whisper-large-v3" }
+}

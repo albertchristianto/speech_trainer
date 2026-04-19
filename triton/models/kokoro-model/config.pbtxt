@@ -1,0 +1,47 @@
+name: "kokoro"
+backend: "python"
+max_batch_size: 4
+
+input [
+  {
+    name: "INPUT_IDS"
+    data_type: TYPE_INT64
+    dims: [ -1 ]       # variable-length phoneme token sequence
+  },
+  {
+    name: "SPEED"
+    data_type: TYPE_FP32
+    dims: [ 1 ]
+  },
+  {
+    name: "VOICE"
+    data_type: TYPE_STRING
+    dims: [ 1 ]        # voice name, e.g. "af_heart"
+  }
+]
+
+output [
+  {
+    name: "AUDIO"
+    data_type: TYPE_FP32
+    dims: [ -1 ]       # variable-length waveform at 24kHz
+  }
+]
+
+dynamic_batching {
+  preferred_batch_size: [ 1, 2, 4 ]
+  max_queue_delay_microseconds: 5000
+}
+
+instance_group [
+  {
+    count: 1
+    kind: KIND_GPU
+    gpus: [ 0 ]
+  }
+]
+
+parameters {
+  key: "EXECUTION_ENV_PATH"
+  value: { string_value: "/opt/tritonserver/envs/kokoro" }
+}
