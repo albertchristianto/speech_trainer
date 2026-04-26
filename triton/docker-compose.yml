@@ -1,0 +1,23 @@
+services:
+  triton_server_speech_trainer:
+    image: triton_server_speech_trainer:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
+    runtime: nvidia
+    restart: always
+    ports:
+      - "4060:8000"
+      - "4061:8001"
+      - "4062:8002"
+    volumes:
+      # now mount the necessary folder where your model and data are stored to your Docker work directory.
+      - ./models:/models
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: "nvidia"
+              device_ids: [ '0' ]
+              capabilities: [ gpu ]
+    command: tritonserver --model-repository=/models

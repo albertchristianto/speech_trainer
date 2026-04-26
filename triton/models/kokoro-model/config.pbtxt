@@ -1,5 +1,4 @@
-name: "kokoro"
-backend: "python"
+name: "kokoro-model"
 max_batch_size: 4
 
 input [
