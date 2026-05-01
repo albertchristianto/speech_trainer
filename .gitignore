@@ -1,3 +1,4 @@
+*.onnx
 *.wav
 streamlit/
 debug/

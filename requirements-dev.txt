@@ -4,3 +4,5 @@ pre-commit
 ruff
 openai-whisper==20250625
 sounddevice==0.5.5
+onnxscript==0.6.2
+transformers==4.57.6
